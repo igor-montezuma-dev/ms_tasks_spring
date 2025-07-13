@@ -5,17 +5,18 @@ import com.montezumadev.service.tasks.model.TasksEntity;
 import com.montezumadev.service.tasks.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class TasksService {
 
     private final TaskRepository tasksRepository;
-    private final NotificationClient notificationClient;
+    private final NotificationService notificationService;
 
-    public TasksService(TaskRepository tasksRepository, NotificationClient notificationClient) {
+    public TasksService(TaskRepository tasksRepository, NotificationService notificationService) {
         this.tasksRepository = tasksRepository;
-        this.notificationClient = notificationClient;
+        this.notificationService = notificationService;
     }
 
     public TasksEntity createTask(TasksEntity tasksEntity) {
@@ -23,7 +24,8 @@ public class TasksService {
     }
 
     public void sendNotificationForDueTasks() {
-        List<TasksEntity> tasks = tasksRepository.findDueDateTasks();
+        LocalDateTime deadline = LocalDateTime.now().plusDays(1);
+        List<TasksEntity> tasks = tasksRepository.findTasksDueWithinDeadline(deadline);
         tasks.forEach(this::sendNotification);
     }
 
@@ -32,7 +34,7 @@ public class TasksService {
                 String.format("Sua tarefa: %s está prestes a vencer", task.getTitle()),
                 task.getEmail()
         );
-        notificationClient.sendNotification(request);
+        notificationService.sendNotification(request);
         task.setNotified(true);
     }
 }

@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "service-notification")
-public interface NotificationClient {
+
+public interface NotificationService {
 
     @PostMapping("/notification")
     void sendNotification(@RequestBody NotificationRequestDTO request);
