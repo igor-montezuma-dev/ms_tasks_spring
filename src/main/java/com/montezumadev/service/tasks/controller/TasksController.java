@@ -1,6 +1,7 @@
 package com.montezumadev.service.tasks.controller;
 
-import com.montezumadev.service.tasks.model.TasksEntity;
+import com.montezumadev.service.tasks.dto.TaskRequestDTO;
+import com.montezumadev.service.tasks.model.TaskEntity;
 import com.montezumadev.service.tasks.service.TasksService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,9 @@ public class TasksController {
     }
 
     @PostMapping
-    public ResponseEntity<TasksEntity> createTask(@RequestBody TasksEntity tasksEntity) {
-        TasksEntity createdTask = tasksService.createTask(tasksEntity);
+    public ResponseEntity<TaskEntity> createTask(@RequestBody TaskRequestDTO taskRequest) {
+        TaskEntity taskEntity = new TaskEntity(taskRequest);
+        TaskEntity createdTask = tasksService.createTask(taskEntity);
         return ResponseEntity.ok(createdTask);
     }
 

@@ -1,5 +1,6 @@
 package com.montezumadev.service.tasks.model;
 
+import com.montezumadev.service.tasks.dto.TaskRequestDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -16,7 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "task")
-public class TasksEntity {
+public class TaskEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -26,4 +27,11 @@ public class TasksEntity {
     private LocalDateTime dueDate;
     private boolean notified;
 
+
+    public TaskEntity(TaskRequestDTO taskRequest){
+        this.title = taskRequest.title();
+        this.email = taskRequest.email();
+        this.dueDate = taskRequest.dueDate();
+        this.notified = taskRequest.notified();
+    }
 }
